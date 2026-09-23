@@ -7,6 +7,7 @@ import { Home } from './pages/Home';
 import { TicketList } from './pages/TicketList';
 import { TicketAssignment } from './pages/TicketAssignment';
 import { Dashboard } from './pages/Dashboard';
+import { UserList } from './pages/UserList';
 
 const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -42,6 +43,14 @@ export const App: React.FC = () => {
                           element={
                             <AdminRoute>
                               <TicketAssignment />
+                            </AdminRoute>
+                          }
+                        />
+                        <Route
+                          path="/users"
+                          element={
+                            <AdminRoute>
+                              <UserList />
                             </AdminRoute>
                           }
                         />

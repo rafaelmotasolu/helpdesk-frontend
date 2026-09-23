@@ -11,6 +11,25 @@ export interface User {
   name: string;
   email: string;
   role: Role;
+  active?: boolean;
+  createdAt?: string;
+}
+
+export interface UserCreatePayload {
+  name: string;
+  email: string;
+  password?: string;
+  role: Role;
+}
+
+export interface UserUpdatePayload {
+  name: string;
+  email: string;
+  role: Role;
+}
+
+export interface UserPasswordUpdatePayload {
+  newPassword: string;
 }
 
 export interface AuthResponse {

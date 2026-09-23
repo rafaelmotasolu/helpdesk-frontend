@@ -14,6 +14,7 @@ import {
   AlertCircle,
   ArrowRight,
   Headphones,
+  Users,
 } from 'lucide-react';
 
 export const Home: React.FC = () => {
@@ -173,6 +174,15 @@ export const Home: React.FC = () => {
               Atribuições
             </button>
           )}
+          {user?.role === 'ADMIN' && (
+            <button
+              onClick={() => navigate('/users')}
+              className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium px-4 py-2 rounded-lg text-sm transition flex items-center gap-1.5"
+            >
+              <Users size={16} />
+              Usuários
+            </button>
+          )}
         </div>
       </div>
 
@@ -224,7 +234,7 @@ export const Home: React.FC = () => {
         <h2 className="text-base font-bold text-slate-900 mb-3">Atalhos da Plataforma</h2>
         <div
           className={`grid grid-cols-1 md:grid-cols-2 ${
-            user?.role === 'ADMIN' ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
+            user?.role === 'ADMIN' ? 'lg:grid-cols-3 xl:grid-cols-5' : 'lg:grid-cols-3'
           } gap-4`}
         >
           <div
@@ -261,6 +271,27 @@ export const Home: React.FC = () => {
                 </p>
               </div>
               <div className="mt-4 pt-3 border-t border-slate-100 flex items-center text-xs font-semibold text-indigo-600">
+                <span>Gerenciar</span>
+                <ArrowRight size={14} className="ml-1" />
+              </div>
+            </div>
+          )}
+
+          {user?.role === 'ADMIN' && (
+            <div
+              onClick={() => navigate('/users')}
+              className="bg-white p-5 rounded-xl border border-slate-200 hover:border-blue-400 hover:shadow-xs transition cursor-pointer flex flex-col justify-between"
+            >
+              <div>
+                <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mb-3">
+                  <Users size={20} />
+                </div>
+                <h3 className="text-sm font-bold text-slate-900">Gestão de Usuários</h3>
+                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                  Cadastre novos usuários, altere permissões, redefina senhas e inative contas.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center text-xs font-semibold text-blue-600">
                 <span>Gerenciar</span>
                 <ArrowRight size={14} className="ml-1" />
               </div>
