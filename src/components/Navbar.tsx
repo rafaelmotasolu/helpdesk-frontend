@@ -105,7 +105,7 @@ export const Navbar: React.FC = () => {
                 <Headphones size={18} />
               </div>
               <span className="text-lg font-bold tracking-tight text-slate-900">
-                HelpDesk<span className="text-blue-600 ml-0.5">PRO</span>
+                Helpdesk
               </span>
             </NavLink>
 

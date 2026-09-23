@@ -38,7 +38,7 @@ export const Login: React.FC = () => {
             <Headphones size={22} />
           </div>
           <h1 className="text-xl font-bold tracking-tight text-slate-900">
-            HelpDesk<span className="text-blue-600 ml-0.5">PRO</span>
+            Helpdesk
           </h1>
           <p className="text-xs text-slate-500 mt-1">
             Acesse para gerenciar suas solicitações de suporte

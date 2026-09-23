@@ -65,6 +65,15 @@ export const TicketAssignment: React.FC = () => {
   }, [reloadKey]);
 
   const handleAssign = async (ticketId: number, techId: number) => {
+    const targetTicket = tickets.find((t) => t.id === ticketId);
+    if (targetTicket?.status === 'CLOSED') {
+      alert('Não é permitido atribuir técnico a um chamado já encerrado.');
+      return;
+    }
+    if (targetTicket?.customerId === techId) {
+      alert('Um técnico não pode ser atribuído ao seu próprio chamado.');
+      return;
+    }
     setAssigningTicketId(ticketId);
     try {
       await ticketService.assignTechnician(ticketId, techId);
@@ -74,9 +83,10 @@ export const TicketAssignment: React.FC = () => {
       );
       setTimeout(() => setActionSuccessMessage(null), 3500);
       setReloadKey((k) => k + 1);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Erro ao atribuir técnico:', err);
-      alert('Não foi possível atribuir o técnico. Tente novamente.');
+      const errorObj = err as { response?: { data?: { message?: string } } };
+      alert(errorObj.response?.data?.message || 'Não foi possível atribuir o técnico. Tente novamente.');
     } finally {
       setAssigningTicketId(null);
     }
@@ -92,6 +102,7 @@ export const TicketAssignment: React.FC = () => {
 
   const filteredTickets = tickets.filter((t) => {
     if (t.ticketEnabled === false) return false;
+    if (t.status === 'CLOSED') return false;
     if (filterMode === 'UNASSIGNED' && t.technicianId) return false;
 
     const customer = usersMap[t.customerId]?.name?.toLowerCase() || '';
@@ -404,9 +415,15 @@ export const TicketAssignment: React.FC = () => {
                     {selectedTech ? (
                       <button
                         onClick={() => handleAssign(ticket.id, selectedTech.id)}
-                        disabled={isAssigningThis || ticket.technicianId === selectedTech.id}
+                        disabled={
+                          isAssigningThis ||
+                          ticket.technicianId === selectedTech.id ||
+                          ticket.customerId === selectedTech.id
+                        }
                         className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition flex items-center justify-center gap-1.5 ${
-                          ticket.technicianId === selectedTech.id
+                          ticket.customerId === selectedTech.id
+                            ? 'bg-amber-50 text-amber-700 border border-amber-200 cursor-not-allowed'
+                            : ticket.technicianId === selectedTech.id
                             ? 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed'
                             : 'bg-blue-600 hover:bg-blue-700 text-white'
                         }`}
@@ -417,7 +434,9 @@ export const TicketAssignment: React.FC = () => {
                           <UserCheck size={14} />
                         )}
                         <span>
-                          {ticket.technicianId === selectedTech.id
+                          {ticket.customerId === selectedTech.id
+                            ? 'Solicitante do chamado'
+                            : ticket.technicianId === selectedTech.id
                             ? 'Já atribuído'
                             : `Atribuir a ${selectedTech.name}`}
                         </span>
@@ -440,11 +459,14 @@ export const TicketAssignment: React.FC = () => {
                       <option value="" disabled>
                         Outro técnico...
                       </option>
-                      {technicians.map((t) => (
-                        <option key={t.id} value={t.id}>
-                          {t.name} ({getTechWorkload(t.id)})
-                        </option>
-                      ))}
+                      {technicians.map((t) => {
+                        const isRequester = t.id === ticket.customerId;
+                        return (
+                          <option key={t.id} value={t.id} disabled={isRequester}>
+                            {t.name} ({getTechWorkload(t.id)}) {isRequester ? '- Solicitante' : ''}
+                          </option>
+                        );
+                      })}
                     </select>
                   </div>
                 </div>

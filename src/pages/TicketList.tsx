@@ -13,6 +13,7 @@ import {
   User as UserIcon,
   SlidersHorizontal,
   Clock,
+  Lock,
 } from 'lucide-react';
 
 export const TicketList: React.FC = () => {
@@ -99,15 +100,21 @@ export const TicketList: React.FC = () => {
       setNewDesc('');
       showNotification('Chamado criado com sucesso!');
       setReloadKey((k) => k + 1);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Erro ao criar chamado:', err);
-      showNotification('Erro ao criar o chamado. Verifique os dados.', 'error');
+      const errorObj = err as { response?: { data?: { message?: string } } };
+      const msg = errorObj.response?.data?.message || 'Erro ao criar o chamado. Verifique os dados.';
+      showNotification(msg, 'error');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleStatusChange = async (ticketId: number, status: Status) => {
+    if (selectedTicket?.status === 'CLOSED') {
+      showNotification('Não é permitido alterar o status de um chamado já fechado.', 'error');
+      return;
+    }
     try {
       await ticketService.updateStatus(ticketId, status);
       showNotification(`Status do chamado #${ticketId} alterado para ${status}.`);
@@ -115,13 +122,23 @@ export const TicketList: React.FC = () => {
       if (selectedTicket?.id === ticketId) {
         setSelectedTicket((prev) => (prev ? { ...prev, status } : null));
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Erro ao mudar status:', err);
-      showNotification('Não foi possível alterar o status.', 'error');
+      const errorObj = err as { response?: { data?: { message?: string } } };
+      const msg = errorObj.response?.data?.message || 'Não foi possível alterar o status.';
+      showNotification(msg, 'error');
     }
   };
 
   const handleAssign = async (ticketId: number, technicianId: number) => {
+    if (selectedTicket?.status === 'CLOSED') {
+      showNotification('Não é permitido atribuir técnico a um chamado já encerrado.', 'error');
+      return;
+    }
+    if (selectedTicket?.customerId === technicianId) {
+      showNotification('Um técnico não pode ser atribuído ao seu próprio chamado.', 'error');
+      return;
+    }
     try {
       await ticketService.assignTechnician(ticketId, technicianId);
       const targetTech = technicians.find((t) => t.id === technicianId);
@@ -131,12 +148,14 @@ export const TicketList: React.FC = () => {
       setReloadKey((k) => k + 1);
       if (selectedTicket?.id === ticketId) {
         setSelectedTicket((prev) =>
-          prev ? { ...prev, technicianId, status: 'IN_PROGRESS' } : null
+          prev ? { ...prev, technicianId, status: prev.status === 'OPEN' ? 'IN_PROGRESS' : prev.status } : null
         );
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Erro ao atribuir técnico:', err);
-      showNotification('Não foi possível atribuir o técnico.', 'error');
+      const errorObj = err as { response?: { data?: { message?: string } } };
+      const msg = errorObj.response?.data?.message || 'Não foi possível atribuir o técnico.';
+      showNotification(msg, 'error');
     }
   };
 
@@ -512,7 +531,7 @@ export const TicketList: React.FC = () => {
                           Ver
                         </button>
 
-                        {user?.role === 'ADMIN' && t.ticketEnabled !== false && (
+                        {user?.role === 'ADMIN' && t.ticketEnabled !== false && t.status !== 'CLOSED' && (
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -559,7 +578,8 @@ export const TicketList: React.FC = () => {
                 <input
                   type="text"
                   required
-                  placeholder="Ex: Falha ao inicializar serviço de impressão"
+                  minLength={5}
+                  placeholder="Ex: Falha ao inicializar serviço de impressão (mínimo 5 caracteres)"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
                   className="w-full text-xs border border-slate-200 rounded-lg px-3 py-2 focus:ring-1 focus:ring-blue-500 focus:outline-none"
@@ -572,8 +592,9 @@ export const TicketList: React.FC = () => {
                 </label>
                 <textarea
                   required
+                  minLength={10}
                   rows={3}
-                  placeholder="Descreva a ocorrência..."
+                  placeholder="Descreva a ocorrência detalhadamente (mínimo 10 caracteres)..."
                   value={newDesc}
                   onChange={(e) => setNewDesc(e.target.value)}
                   className="w-full text-xs border border-slate-200 rounded-lg px-3 py-2 focus:ring-1 focus:ring-blue-500 focus:outline-none"
@@ -711,45 +732,62 @@ export const TicketList: React.FC = () => {
                   Atualizar Atendimento
                 </h3>
 
-                <div className={`grid ${user?.role === 'ADMIN' ? 'grid-cols-2' : 'grid-cols-1'} gap-3`}>
-                  <div>
-                    <label className="block text-[11px] font-medium text-slate-600 mb-1">Status</label>
-                    <select
-                      value={selectedTicket.status}
-                      onChange={(e) => handleStatusChange(selectedTicket.id, e.target.value as Status)}
-                      className="w-full border border-slate-200 rounded-lg px-2 py-1.5 text-xs bg-slate-50 focus:bg-white focus:ring-1 focus:ring-blue-500"
-                    >
-                      <option value="OPEN">Aberto</option>
-                      <option value="IN_PROGRESS">Em Atendimento</option>
-                      <option value="WAITING">Pendente</option>
-                      <option value="RESOLVED">Resolvido</option>
-                      <option value="CLOSED">Fechado</option>
-                    </select>
-                  </div>
-
-                  {user?.role === 'ADMIN' && (
+                {selectedTicket.status === 'CLOSED' ? (
+                  <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center gap-2.5 text-xs text-slate-600">
+                    <div className="w-7 h-7 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center shrink-0">
+                      <Lock size={14} />
+                    </div>
                     <div>
-                      <label className="block text-[11px] font-medium text-slate-600 mb-1">Atribuir Técnico</label>
+                      <span className="font-semibold text-slate-800 block">Chamado Fechado</span>
+                      <span className="text-[11px] text-slate-500">
+                        Este chamado foi encerrado definitivamente e não permite novas alterações de status ou técnico.
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className={`grid ${user?.role === 'ADMIN' ? 'grid-cols-2' : 'grid-cols-1'} gap-3`}>
+                    <div>
+                      <label className="block text-[11px] font-medium text-slate-600 mb-1">Status</label>
                       <select
-                        value={selectedTicket.technicianId || ''}
-                        onChange={(e) => handleAssign(selectedTicket.id, Number(e.target.value))}
+                        value={selectedTicket.status}
+                        onChange={(e) => handleStatusChange(selectedTicket.id, e.target.value as Status)}
                         className="w-full border border-slate-200 rounded-lg px-2 py-1.5 text-xs bg-slate-50 focus:bg-white focus:ring-1 focus:ring-blue-500"
                       >
-                        <option value="">Não atribuído</option>
-                        {technicians.map((tech) => (
-                          <option key={tech.id} value={tech.id}>
-                            {tech.name}
-                          </option>
-                        ))}
+                        <option value="OPEN">Aberto</option>
+                        <option value="IN_PROGRESS">Em Atendimento</option>
+                        <option value="WAITING">Pendente</option>
+                        <option value="RESOLVED">Resolvido</option>
+                        <option value="CLOSED">Fechado</option>
                       </select>
                     </div>
-                  )}
-                </div>
+
+                    {user?.role === 'ADMIN' && (
+                      <div>
+                        <label className="block text-[11px] font-medium text-slate-600 mb-1">Atribuir Técnico</label>
+                        <select
+                          value={selectedTicket.technicianId || ''}
+                          onChange={(e) => handleAssign(selectedTicket.id, Number(e.target.value))}
+                          className="w-full border border-slate-200 rounded-lg px-2 py-1.5 text-xs bg-slate-50 focus:bg-white focus:ring-1 focus:ring-blue-500"
+                        >
+                          <option value="">Não atribuído</option>
+                          {technicians.map((tech) => {
+                            const isRequester = tech.id === selectedTicket.customerId;
+                            return (
+                              <option key={tech.id} value={tech.id} disabled={isRequester}>
+                                {tech.name} {isRequester ? '(Solicitante do chamado)' : ''}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 
             <div className="flex justify-between items-center pt-3 border-t border-slate-100">
-              {user?.role === 'ADMIN' && selectedTicket.ticketEnabled !== false ? (
+              {user?.role === 'ADMIN' && selectedTicket.ticketEnabled !== false && selectedTicket.status !== 'CLOSED' ? (
                 <button
                   onClick={() => setCancelModalTicket(selectedTicket)}
                   className="px-3 py-1.5 bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 rounded-lg text-xs font-medium transition"

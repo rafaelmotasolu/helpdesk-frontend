@@ -153,7 +153,7 @@ export const Home: React.FC = () => {
             </span>
           </div>
           <p className="text-sm text-slate-500 max-w-xl">
-            Bem-vindo à central do HelpDesk PRO. Acompanhe os chamados, gerencie as solicitações e distribua atendimentos.
+            Bem-vindo à central do Helpdesk. Acompanhe os chamados, gerencie as solicitações e distribua atendimentos.
           </p>
         </div>
 
