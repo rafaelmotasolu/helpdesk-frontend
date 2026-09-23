@@ -31,6 +31,7 @@ export interface Ticket {
   category: Category;
   customerId: number;
   technicianId?: number | null;
+  ticketEnabled?: boolean;
   createdAt: string;
   updatedAt?: string;
 }
