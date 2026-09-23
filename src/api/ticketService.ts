@@ -1,5 +1,5 @@
 import api from './api';
-import { Ticket, TicketCreatePayload, Status, Priority, Category } from '../types';
+import type { Ticket, TicketCreatePayload, Status, Priority, Category } from '../types';
 
 export const ticketService = {
   async getAll(params?: {

@@ -43,3 +43,4 @@ export interface TicketCreatePayload {
   priority: Priority;
   customerId: number;
 }
+
