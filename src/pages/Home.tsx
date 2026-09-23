@@ -13,7 +13,6 @@ import {
   CheckCircle2,
   AlertCircle,
   ArrowRight,
-  ShieldCheck,
   Headphones,
 } from 'lucide-react';
 
@@ -57,45 +56,45 @@ export const Home: React.FC = () => {
   const getStatusBadge = (status: string, enabled?: boolean) => {
     if (enabled === false) {
       return (
-        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
-          CANCELADO
+        <span className="px-2 py-0.5 rounded text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+          Cancelado
         </span>
       );
     }
     switch (status) {
       case 'OPEN':
         return (
-          <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
-            ABERTO
+          <span className="px-2 py-0.5 rounded text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+            Aberto
           </span>
         );
       case 'IN_PROGRESS':
         return (
-          <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-            EM ATENDIMENTO
+          <span className="px-2 py-0.5 rounded text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+            Em Atendimento
           </span>
         );
       case 'WAITING':
         return (
-          <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">
-            PENDENTE
+          <span className="px-2 py-0.5 rounded text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">
+            Pendente
           </span>
         );
       case 'RESOLVED':
         return (
-          <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-            RESOLVIDO
+          <span className="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            Resolvido
           </span>
         );
       case 'CLOSED':
         return (
-          <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
-            FECHADO
+          <span className="px-2 py-0.5 rounded text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+            Fechado
           </span>
         );
       default:
         return (
-          <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
+          <span className="px-2 py-0.5 rounded text-xs font-semibold bg-slate-100 text-slate-700">
             {status}
           </span>
         );
@@ -107,26 +106,26 @@ export const Home: React.FC = () => {
       case 'CRITICAL':
         return (
           <span className="px-2 py-0.5 rounded text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200">
-            CRÍTICO
+            Crítico
           </span>
         );
       case 'HIGH':
         return (
           <span className="px-2 py-0.5 rounded text-xs font-semibold bg-orange-50 text-orange-700 border border-orange-200">
-            ALTA
+            Alta
           </span>
         );
       case 'MEDIUM':
         return (
           <span className="px-2 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
-            MÉDIA
+            Média
           </span>
         );
       case 'LOW':
       default:
         return (
           <span className="px-2 py-0.5 rounded text-xs font-medium bg-sky-50 text-sky-700 border border-sky-200">
-            BAIXA
+            Baixa
           </span>
         );
     }
@@ -136,65 +135,66 @@ export const Home: React.FC = () => {
     user?.role === 'ADMIN'
       ? 'Administrador'
       : user?.role === 'TECHNICIAN'
-      ? 'Técnico Especialista'
-      : 'Cliente Solicitante';
+      ? 'Técnico'
+      : 'Cliente';
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
-      {/* Banner de Boas-Vindas */}
-      <div className="bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 rounded-2xl p-6 sm:p-8 text-white shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+      {/* Banner de Boas-Vindas Amigável e Limpo */}
+      <div className="bg-white border border-slate-200 rounded-xl p-6 sm:p-7 shadow-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-800/60 border border-blue-400/30 text-blue-100 text-xs font-medium mb-3">
-            <ShieldCheck size={14} className="text-blue-300" />
-            <span>Perfil: {roleLabel}</span>
+          <div className="flex items-center gap-2 mb-1.5">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
+              Olá, {user?.name || 'Usuário'}! 👋
+            </h1>
+            <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+              {roleLabel}
+            </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-            Olá, {user?.name || 'Usuário'}! 👋
-          </h1>
-          <p className="text-blue-100 mt-2 max-w-2xl text-sm sm:text-base leading-relaxed">
-            Bem-vindo à central HelpDesk PRO. Acompanhe a saúde operacional dos chamados, gerencie atendimentos e atribua demandas para a equipe.
+          <p className="text-sm text-slate-500 max-w-xl">
+            Bem-vindo à central do HelpDesk PRO. Acompanhe os chamados, gerencie as solicitações e distribua atendimentos.
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex items-center gap-2.5 shrink-0">
           <button
             onClick={() => navigate('/tickets')}
-            className="bg-white text-blue-700 hover:bg-blue-50 font-semibold px-4 py-2.5 rounded-xl shadow-xs transition flex items-center gap-2 text-sm"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition flex items-center gap-2"
           >
-            <TicketIcon size={18} />
+            <TicketIcon size={16} />
             Ver Chamados
           </button>
-          {(user?.role === 'ADMIN' || user?.role === 'TECHNICIAN') && (
+          {user?.role === 'ADMIN' && (
             <button
               onClick={() => navigate('/assign')}
-              className="bg-blue-800/80 hover:bg-blue-800 text-white font-medium px-4 py-2.5 rounded-xl border border-blue-400/40 shadow-xs transition flex items-center gap-2 text-sm"
+              className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium px-4 py-2 rounded-lg text-sm transition flex items-center gap-1.5"
             >
-              <UserCheck size={18} />
-              Atribuir Técnicos
+              <UserCheck size={16} />
+              Atribuições
             </button>
           )}
         </div>
       </div>
 
-      {/* Indicadores Rápidos */}
+      {/* Grade de Indicadores Rápidos */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
           <div>
             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total de Chamados</p>
             <p className="text-2xl font-bold text-slate-900 mt-1">{loading ? '...' : totalTickets}</p>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center">
-            <TicketIcon size={22} />
+          <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+            <TicketIcon size={20} />
           </div>
         </div>
 
         <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Abertos / Pendentes</p>
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Abertos</p>
             <p className="text-2xl font-bold text-amber-600 mt-1">{loading ? '...' : openTickets}</p>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center">
-            <AlertCircle size={22} />
+          <div className="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+            <AlertCircle size={20} />
           </div>
         </div>
 
@@ -203,111 +203,105 @@ export const Home: React.FC = () => {
             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Em Atendimento</p>
             <p className="text-2xl font-bold text-blue-600 mt-1">{loading ? '...' : inProgressTickets}</p>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center">
-            <Clock size={22} />
+          <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+            <Clock size={20} />
           </div>
         </div>
 
         <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Resolvidos / Concluídos</p>
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Resolvidos</p>
             <p className="text-2xl font-bold text-emerald-600 mt-1">{loading ? '...' : resolvedTickets}</p>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center">
-            <CheckCircle2 size={22} />
+          <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+            <CheckCircle2 size={20} />
           </div>
         </div>
       </div>
 
-      {/* Cartões de Acesso Rápido */}
+      {/* Atalhos Rápidos */}
       <div>
-        <h2 className="text-lg font-bold text-slate-900 mb-4">Acesso Rápido aos Módulos</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          {/* Card 1: Chamados */}
+        <h2 className="text-base font-bold text-slate-900 mb-3">Atalhos da Plataforma</h2>
+        <div
+          className={`grid grid-cols-1 md:grid-cols-2 ${
+            user?.role === 'ADMIN' ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
+          } gap-4`}
+        >
           <div
             onClick={() => navigate('/tickets')}
-            className="group bg-white p-6 rounded-xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer flex flex-col justify-between"
+            className="bg-white p-5 rounded-xl border border-slate-200 hover:border-blue-400 hover:shadow-xs transition cursor-pointer flex flex-col justify-between"
           >
             <div>
-              <div className="w-12 h-12 rounded-xl bg-blue-50 group-hover:bg-blue-600 text-blue-600 group-hover:text-white transition flex items-center justify-center mb-4">
-                <TicketIcon size={24} />
+              <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mb-3">
+                <TicketIcon size={20} />
               </div>
-              <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition">
-                Central de Chamados
-              </h3>
-              <p className="text-sm text-slate-500 mt-2 leading-relaxed">
-                Navegue pela lista de chamados, filtre por status, prioridade ou pesquise por clientes e técnicos.
+              <h3 className="text-sm font-bold text-slate-900">Central de Chamados</h3>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                Consulte, filtre e gerencie solicitações com busca por clientes e técnicos.
               </p>
             </div>
-            <div className="mt-5 flex items-center text-sm font-semibold text-blue-600 group-hover:translate-x-1 transition duration-200">
-              <span>Ir para Chamados</span>
-              <ArrowRight size={16} className="ml-1" />
+            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center text-xs font-semibold text-blue-600">
+              <span>Acessar</span>
+              <ArrowRight size={14} className="ml-1" />
             </div>
           </div>
 
-          {/* Card 2: Atribuição de Técnicos */}
-          <div
-            onClick={() => navigate('/assign')}
-            className="group bg-white p-6 rounded-xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer flex flex-col justify-between"
-          >
-            <div>
-              <div className="w-12 h-12 rounded-xl bg-indigo-50 group-hover:bg-indigo-600 text-indigo-600 group-hover:text-white transition flex items-center justify-center mb-4">
-                <UserCheck size={24} />
+          {user?.role === 'ADMIN' && (
+            <div
+              onClick={() => navigate('/assign')}
+              className="bg-white p-5 rounded-xl border border-slate-200 hover:border-blue-400 hover:shadow-xs transition cursor-pointer flex flex-col justify-between"
+            >
+              <div>
+                <div className="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center mb-3">
+                  <UserCheck size={20} />
+                </div>
+                <h3 className="text-sm font-bold text-slate-900">Atribuição de Técnicos</h3>
+                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                  Distribua os chamados abertos entre os técnicos disponíveis da equipe.
+                </p>
               </div>
-              <h3 className="text-base font-bold text-slate-900 group-hover:text-indigo-600 transition">
-                Atribuição de Técnicos
-              </h3>
-              <p className="text-sm text-slate-500 mt-2 leading-relaxed">
-                Selecione os especialistas disponíveis e distribua os chamados pendentes para agilizar o suporte.
-              </p>
+              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center text-xs font-semibold text-indigo-600">
+                <span>Gerenciar</span>
+                <ArrowRight size={14} className="ml-1" />
+              </div>
             </div>
-            <div className="mt-5 flex items-center text-sm font-semibold text-indigo-600 group-hover:translate-x-1 transition duration-200">
-              <span>Gerenciar Atribuições</span>
-              <ArrowRight size={16} className="ml-1" />
-            </div>
-          </div>
+          )}
 
-          {/* Card 3: Métricas */}
           <div
             onClick={() => navigate('/dashboard')}
-            className="group bg-white p-6 rounded-xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer flex flex-col justify-between"
+            className="bg-white p-5 rounded-xl border border-slate-200 hover:border-blue-400 hover:shadow-xs transition cursor-pointer flex flex-col justify-between"
           >
             <div>
-              <div className="w-12 h-12 rounded-xl bg-sky-50 group-hover:bg-sky-600 text-sky-600 group-hover:text-white transition flex items-center justify-center mb-4">
-                <BarChart3 size={24} />
+              <div className="w-10 h-10 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center mb-3">
+                <BarChart3 size={20} />
               </div>
-              <h3 className="text-base font-bold text-slate-900 group-hover:text-sky-600 transition">
-                Métricas & Dashboard
-              </h3>
-              <p className="text-sm text-slate-500 mt-2 leading-relaxed">
-                Analise os indicadores de desempenho, volume de incidentes e proporções críticas em tempo real.
+              <h3 className="text-sm font-bold text-slate-900">Métricas & Dashboard</h3>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                Acompanhe indicadores de volume, categorias e proporções de chamados.
               </p>
             </div>
-            <div className="mt-5 flex items-center text-sm font-semibold text-sky-600 group-hover:translate-x-1 transition duration-200">
-              <span>Visualizar Métricas</span>
-              <ArrowRight size={16} className="ml-1" />
+            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center text-xs font-semibold text-sky-600">
+              <span>Visualizar</span>
+              <ArrowRight size={14} className="ml-1" />
             </div>
           </div>
 
-          {/* Card 4: Novo Chamado */}
           <div
             onClick={() => navigate('/tickets')}
-            className="group bg-white p-6 rounded-xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition cursor-pointer flex flex-col justify-between"
+            className="bg-white p-5 rounded-xl border border-slate-200 hover:border-blue-400 hover:shadow-xs transition cursor-pointer flex flex-col justify-between"
           >
             <div>
-              <div className="w-12 h-12 rounded-xl bg-emerald-50 group-hover:bg-emerald-600 text-emerald-600 group-hover:text-white transition flex items-center justify-center mb-4">
-                <PlusCircle size={24} />
+              <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3">
+                <PlusCircle size={20} />
               </div>
-              <h3 className="text-base font-bold text-slate-900 group-hover:text-emerald-600 transition">
-                Abertura de Chamado
-              </h3>
-              <p className="text-sm text-slate-500 mt-2 leading-relaxed">
-                Cadastre novas ocorrências técnicas definindo categoria, descrição detalhada e criticidade.
+              <h3 className="text-sm font-bold text-slate-900">Novo Chamado</h3>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                Registre uma nova ocorrência técnica definindo prioridade e categoria.
               </p>
             </div>
-            <div className="mt-5 flex items-center text-sm font-semibold text-emerald-600 group-hover:translate-x-1 transition duration-200">
-              <span>Novo Chamado</span>
-              <ArrowRight size={16} className="ml-1" />
+            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center text-xs font-semibold text-emerald-600">
+              <span>Criar Chamado</span>
+              <ArrowRight size={14} className="ml-1" />
             </div>
           </div>
         </div>
@@ -315,24 +309,24 @@ export const Home: React.FC = () => {
 
       {/* Chamados Recentes */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50/50">
+        <div className="px-5 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50/50">
           <div>
-            <h2 className="text-base font-bold text-slate-900">Chamados Recentes</h2>
-            <p className="text-xs text-slate-500">Últimas solicitações registradas na plataforma</p>
+            <h2 className="text-sm font-bold text-slate-900">Chamados Recentes</h2>
+            <p className="text-xs text-slate-500">Últimas solicitações registradas no sistema</p>
           </div>
           <button
             onClick={() => navigate('/tickets')}
             className="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1 transition"
           >
             Ver todos ({totalTickets})
-            <ArrowRight size={14} />
+            <ArrowRight size={13} />
           </button>
         </div>
 
         {loading ? (
-          <div className="py-12 text-center text-sm text-slate-500">Carregando chamados recentes...</div>
+          <div className="py-10 text-center text-xs text-slate-500">Carregando chamados...</div>
         ) : recentTickets.length === 0 ? (
-          <div className="py-12 text-center text-sm text-slate-500">Nenhum chamado cadastrado ainda.</div>
+          <div className="py-10 text-center text-xs text-slate-500">Nenhum chamado encontrado.</div>
         ) : (
           <div className="divide-y divide-slate-100">
             {recentTickets.map((ticket) => {
@@ -343,23 +337,23 @@ export const Home: React.FC = () => {
                 <div
                   key={ticket.id}
                   onClick={() => navigate('/tickets')}
-                  className="px-6 py-4 hover:bg-slate-50/80 transition cursor-pointer flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                  className="px-5 py-3.5 hover:bg-slate-50/80 transition cursor-pointer flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
                 >
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
-                      <Headphones size={18} />
+                  <div className="flex items-start gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100 mt-0.5">
+                      <Headphones size={17} />
                     </div>
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-xs font-bold text-slate-400">#{ticket.id}</span>
+                        <span className="text-xs font-semibold text-slate-400">#{ticket.id}</span>
                         <h4 className="text-sm font-semibold text-slate-800 hover:text-blue-600 transition">
                           {ticket.title}
                         </h4>
                         {getPriorityBadge(ticket.priority)}
                         {getStatusBadge(ticket.status, ticket.ticketEnabled)}
                       </div>
-                      <p className="text-xs text-slate-500 mt-1 line-clamp-1">{ticket.description}</p>
-                      <div className="flex items-center gap-4 mt-2 text-xs text-slate-500">
+                      <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{ticket.description}</p>
+                      <div className="flex items-center gap-3 mt-1.5 text-xs text-slate-400">
                         <span>
                           Solicitante:{' '}
                           <strong className="text-slate-700">{customer?.name || `ID #${ticket.customerId}`}</strong>
@@ -377,13 +371,9 @@ export const Home: React.FC = () => {
 
                   <div className="text-right shrink-0">
                     <span className="text-xs text-slate-400 block">
-                      {new Date(ticket.createdAt).toLocaleDateString('pt-BR', {
-                        day: '2-digit',
-                        month: 'short',
-                        year: 'numeric',
-                      })}
+                      {new Date(ticket.createdAt).toLocaleDateString('pt-BR')}
                     </span>
-                    <span className="text-xs font-medium text-blue-600 mt-1 inline-flex items-center gap-0.5">
+                    <span className="text-xs font-semibold text-blue-600 mt-0.5 inline-flex items-center gap-0.5">
                       Detalhes <ArrowRight size={12} />
                     </span>
                   </div>
@@ -396,4 +386,3 @@ export const Home: React.FC = () => {
     </div>
   );
 };
-

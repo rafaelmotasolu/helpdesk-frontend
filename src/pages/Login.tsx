@@ -32,36 +32,38 @@ export const Login: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-sm p-8 border border-slate-200">
+      <div className="max-w-sm w-full bg-white rounded-xl shadow-xs p-7 border border-slate-200">
         <div className="flex flex-col items-center mb-6">
-          <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-xs mb-3">
-            <Headphones size={24} />
+          <div className="w-11 h-11 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-xs mb-2.5">
+            <Headphones size={22} />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">
             HelpDesk<span className="text-blue-600 ml-0.5">PRO</span>
           </h1>
-          <p className="text-xs text-slate-500 mt-1">Plataforma Inteligente de Gestão de Chamados</p>
+          <p className="text-xs text-slate-500 mt-1">
+            Acesse para gerenciar suas solicitações de suporte
+          </p>
         </div>
 
         {error && (
-          <div className="bg-rose-50 border border-rose-200 text-rose-700 px-4 py-3 rounded-xl text-xs flex items-center gap-2 mb-4">
-            <AlertCircle size={16} className="shrink-0 text-rose-600" />
+          <div className="bg-rose-50 border border-rose-200 text-rose-700 px-3.5 py-2.5 rounded-lg text-xs flex items-center gap-2 mb-4">
+            <AlertCircle size={15} className="shrink-0 text-rose-600" />
             <span>{error}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3.5">
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1">E-mail</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-2.5 text-slate-400" size={17} />
+              <Mail className="absolute left-3 top-2.5 text-slate-400" size={16} />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="seu.email@helpdesk.com"
-                className="w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50 focus:bg-white"
+                placeholder="seu.email@empresa.com"
+                className="w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none bg-white"
               />
             </div>
           </div>
@@ -69,14 +71,14 @@ export const Login: React.FC = () => {
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1">Senha</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-2.5 text-slate-400" size={17} />
+              <Lock className="absolute left-3 top-2.5 text-slate-400" size={16} />
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50 focus:bg-white"
+                className="w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:outline-none bg-white"
               />
             </div>
           </div>
@@ -84,33 +86,33 @@ export const Login: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition text-xs shadow-xs disabled:opacity-50 mt-2"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition text-xs shadow-xs disabled:opacity-50 mt-1"
           >
-            {loading ? 'Entrando...' : 'Entrar no Sistema'}
+            {loading ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
 
         <div className="mt-6 pt-5 border-t border-slate-100 text-center">
-          <p className="text-[11px] font-medium text-slate-400 mb-2">Contas de Acesso Rápido para Demonstração:</p>
-          <div className="flex flex-wrap justify-center gap-1.5 text-[11px]">
+          <p className="text-[11px] font-medium text-slate-400 mb-2">Contas de teste para demonstração:</p>
+          <div className="flex flex-wrap justify-center gap-1.5 text-xs">
             <button
               type="button"
               onClick={() => fillQuickCredentials('admin@helpdesk.com')}
-              className="px-2 py-1 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600 rounded-lg transition"
+              className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md text-[11px] font-medium transition"
             >
               Admin
             </button>
             <button
               type="button"
               onClick={() => fillQuickCredentials('carlos.silva@helpdesk.com')}
-              className="px-2 py-1 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600 rounded-lg transition"
+              className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md text-[11px] font-medium transition"
             >
               Técnico (Carlos)
             </button>
             <button
               type="button"
               onClick={() => fillQuickCredentials('ana.pereira@empresa.com')}
-              className="px-2 py-1 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600 rounded-lg transition"
+              className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md text-[11px] font-medium transition"
             >
               Cliente (Ana)
             </button>

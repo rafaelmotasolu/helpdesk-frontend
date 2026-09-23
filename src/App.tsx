@@ -13,6 +13,13 @@ const PrivateRoute: React.FC<{ children: React.ReactElement }> = ({ children }) 
   return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
+const AdminRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
+  const { user, isAuthenticated } = useAuth();
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (user?.role !== 'ADMIN') return <Navigate to="/" replace />;
+  return children;
+};
+
 export const App: React.FC = () => {
   return (
     <AuthProvider>
@@ -30,7 +37,14 @@ export const App: React.FC = () => {
                       <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/tickets" element={<TicketList />} />
-                        <Route path="/assign" element={<TicketAssignment />} />
+                        <Route
+                          path="/assign"
+                          element={
+                            <AdminRoute>
+                              <TicketAssignment />
+                            </AdminRoute>
+                          }
+                        />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="*" element={<Navigate to="/" replace />} />
                       </Routes>
