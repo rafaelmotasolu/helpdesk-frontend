@@ -8,6 +8,7 @@ export const ticketService = {
     category?: Category;
     customerId?: number;
     technicianId?: number;
+    enabledFilter?: string;
   }): Promise<Ticket[]> {
     const res = await api.get('/tickets', { params });
     // Trata resposta paginada ou lista direta
@@ -35,6 +36,10 @@ export const ticketService = {
   },
 
   async close(ticketId: number): Promise<void> {
+    await api.delete(`/tickets/${ticketId}`);
+  },
+
+  async cancel(ticketId: number): Promise<void> {
     await api.delete(`/tickets/${ticketId}`);
   },
 };
