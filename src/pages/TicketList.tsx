@@ -531,6 +531,23 @@ export const TicketList: React.FC = () => {
                           Ver
                         </button>
 
+                        {user?.role === 'TECHNICIAN' &&
+                          !t.technicianId &&
+                          t.customerId !== user.id &&
+                          t.status !== 'CLOSED' &&
+                          t.ticketEnabled !== false && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleAssign(t.id, user.id);
+                              }}
+                              className="px-2 py-1 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded transition"
+                              title="Assumir este chamado para atendimento"
+                            >
+                              Assumir
+                            </button>
+                        )}
+
                         {user?.role === 'ADMIN' && t.ticketEnabled !== false && t.status !== 'CLOSED' && (
                           <button
                             onClick={(e) => {
@@ -784,6 +801,46 @@ export const TicketList: React.FC = () => {
                   </div>
                 )}
               </div>
+            )}
+
+            {/* Ação para Técnico Assumir Chamado Disponível */}
+            {selectedTicket.ticketEnabled !== false &&
+              selectedTicket.status !== 'CLOSED' &&
+              user?.role === 'TECHNICIAN' &&
+              !selectedTicket.technicianId && (
+                <div className="border-t border-slate-100 pt-3">
+                  {selectedTicket.customerId === user.id ? (
+                    <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-center gap-2.5 text-xs text-amber-800">
+                      <AlertTriangle size={15} className="text-amber-600 shrink-0" />
+                      <div>
+                        <span className="font-semibold block">Seu Próprio Chamado</span>
+                        <span className="text-[11px] text-amber-700">
+                          Você é o solicitante deste chamado e não pode assumi-lo como técnico responsável.
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-3 bg-blue-50/60 border border-blue-200 rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
+                          <UserCheck size={16} />
+                        </div>
+                        <div>
+                          <span className="text-xs font-bold text-slate-900 block">Chamado Disponível</span>
+                          <span className="text-[11px] text-slate-500">
+                            Nenhum técnico está atendendo este chamado. Deseja assumi-lo?
+                          </span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => handleAssign(selectedTicket.id, user.id)}
+                        className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold transition flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer"
+                      >
+                        <UserCheck size={14} /> Assumir Chamado
+                      </button>
+                    </div>
+                  )}
+                </div>
             )}
 
             <div className="flex justify-between items-center pt-3 border-t border-slate-100">

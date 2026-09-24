@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { userService } from '../api/userService';
+import { NotificationBell } from './NotificationBell';
 import {
   LogOut,
   Ticket,
@@ -153,6 +154,9 @@ export const Navbar: React.FC = () => {
                 </span>
               </div>
             </div>
+
+            {/* Sino de Notificações em Tempo Real */}
+            <NotificationBell />
 
             {/* Botão de Alterar Senha ao lado do perfil */}
             <button
